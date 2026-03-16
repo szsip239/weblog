@@ -12,20 +12,24 @@
 - **GFM Alert** — `[!TIP]` `[!WARNING]` 等 20+ 类型，带 SVG 图标
 - **扩展语法** — `==高亮==` `++下划线++` `~波浪线~` 脚注
 - **微信兼容** — CSS 变量解析、calc 计算、juice 内联、外链转脚注
-- **腾讯云 COS 图床** — 图片自动上传，URL 跨平台复用
+- **图床可选** — 腾讯云 COS（跨平台复用）或微信自带（零配置）
 - **本地预览** — 375px 手机模拟框，浏览器直接查看
 - **Claude Code Skill** — 自然语言触发排版发布流程
 
 ## 快速开始
 
 ```bash
+# 克隆项目
+git clone https://github.com/szsip239/weblog.git
+cd weblog
+
 # 安装依赖
 npm install
 pip install -r requirements.txt
 
 # 配置凭证
 cp .env.example .env
-# 编辑 .env 填入你的 AppID/Secret 和 COS 密钥
+# 编辑 .env 填入微信 AppID/Secret（必填），COS 密钥（可选）
 
 # 渲染 + 预览
 node render.mjs -i content/example.md -t default --preview
@@ -82,8 +86,8 @@ render.mjs (Node.js)
 微信兼容 HTML (所有样式内联)
     ↓
 publish.py (Python)
-    ├── 腾讯云 COS (内容图片上传)
-    ├── 微信素材 API (封面图 → media_id)
+    ├── 腾讯云 COS (可选，跨平台图床)
+    ├── 微信素材 API (封面图 + 回退图床)
     └── 微信草稿 API (创建草稿)
     ↓
 微信公众号草稿箱
@@ -93,15 +97,53 @@ publish.py (Python)
 
 复制 `.env.example` 为 `.env`，填入：
 
+**必填（微信发布）：**
+
 | 变量 | 说明 | 获取方式 |
 |------|------|----------|
 | `WECHAT_APPID` | 公众号 AppID | 微信公众平台 → 开发 → 基本配置 |
 | `WECHAT_SECRET` | 公众号 AppSecret | 同上 |
+
+**可选（腾讯云 COS 图床）：**
+
+不配置时图片通过微信临时素材上传，仅微信可用。配置后图片上传到 COS，URL 可跨平台复用。
+
+| 变量 | 说明 | 获取方式 |
+|------|------|----------|
 | `COS_SECRET_ID` | 腾讯云 SecretId | 腾讯云控制台 → 访问密钥 |
 | `COS_SECRET_KEY` | 腾讯云 SecretKey | 同上 |
 | `COS_BUCKET` | COS 存储桶名 | 腾讯云 COS 控制台 |
 | `COS_REGION` | COS 地域 | 如 `ap-guangzhou` |
 | `COS_PREFIX` | 图片路径前缀 | 默认 `article` |
+
+使用 COS 还需安装 SDK：`pip install cos-python-sdk-v5`
+
+## Claude Code Skill
+
+本项目包含一个 Claude Code Skill，可通过自然语言触发排版发布流程。
+
+### 安装
+
+将 `skills/weblog/` 目录复制到你的 Claude Code skills 目录：
+
+```bash
+# 方式一：复制到全局 skills 目录
+cp -r skills/weblog ~/.claude/skills/weblog
+
+# 方式二：复制到项目级 skills 目录
+cp -r skills/weblog <your-project>/.claude/skills/weblog
+```
+
+### 使用
+
+在 Claude Code 对话中直接说：
+
+- **"帮我排版发布这篇文章"**
+- **"把 content/xxx.md 发到公众号"**
+- **"用 grace 主题渲染这篇 markdown"**
+- **"排版公众号文章"**
+
+Skill 会自动引导你选择主题配色、生成预览、确认后发布到草稿箱。
 
 ## 致谢
 
