@@ -1,6 +1,6 @@
 ---
 name: weblog
-description: 微信公众号文章排版发布工具。将 Markdown 文件渲染为微信兼容 HTML 并发布到草稿箱。支持 3 种 doocs/md 主题、自定义配色字体、代码高亮、GFM Alert。
+description: 微信公众号文章排版发布工具。将 Markdown 渲染为微信兼容 HTML 并一键发布到草稿箱。支持 3 种 doocs/md 主题、自定义配色字体、90+ 代码高亮主题、GFM Alert。适配 Claude Code / OpenClaw 等 AI Coding 工具。
 triggers:
   - "帮我排版发布这篇文章"
   - "把 {file} 发到公众号"
