@@ -1,5 +1,5 @@
 {
-  "name": "weblog",
+  "name": "weblog-skills",
   "version": "1.0.0",
   "type": "module",
   "description": "AI 公众号写作发布工具 - 基于 doocs/md 排版引擎",
