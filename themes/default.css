@@ -1,0 +1,82 @@
+/**
+ * WebLog 经典主题
+ * 移植自 doocs/md default.css
+ * 蓝色调，标题居中，经典公众号风格
+ */
+
+/* ==================== 一级标题 ==================== */
+h1 {
+  display: table;
+  padding: 0 1em;
+  border-bottom: 2px solid var(--md-primary-color);
+  margin: 2em auto 1em;
+  color: var(--md-text-color);
+  font-size: calc(var(--md-font-size) * 1.2);
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ==================== 二级标题 ==================== */
+h2 {
+  display: table;
+  padding: 0 0.2em;
+  margin: 4em auto 2em;
+  color: #fff;
+  background: var(--md-primary-color);
+  font-size: calc(var(--md-font-size) * 1.2);
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ==================== 三级标题 ==================== */
+h3 {
+  padding-left: 8px;
+  border-left: 3px solid var(--md-primary-color);
+  margin: 2em 8px 0.75em 0;
+  color: var(--md-text-color);
+  font-size: calc(var(--md-font-size) * 1.1);
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+/* ==================== 四级标题 ==================== */
+h4 {
+  margin: 2em 8px 0.5em;
+  color: var(--md-primary-color);
+  font-size: calc(var(--md-font-size) * 1);
+  font-weight: bold;
+}
+
+/* ==================== 五级标题 ==================== */
+h5 {
+  margin: 1.5em 8px 0.5em;
+  color: var(--md-primary-color);
+  font-size: calc(var(--md-font-size) * 1);
+  font-weight: bold;
+}
+
+/* ==================== 六级标题 ==================== */
+h6 {
+  margin: 1.5em 8px 0.5em;
+  font-size: calc(var(--md-font-size) * 1);
+  color: var(--md-primary-color);
+}
+
+/* ==================== 引用块 ==================== */
+blockquote {
+  font-style: normal;
+  padding: 1em;
+  border-left: 4px solid var(--md-primary-color);
+  border-radius: 6px;
+  color: var(--md-text-color);
+  background: var(--blockquote-background);
+  margin-bottom: 1em;
+}
+
+blockquote > p {
+  display: block;
+  font-size: 1em;
+  letter-spacing: 0.1em;
+  color: var(--md-text-color);
+  margin: 0;
+}

@@ -1,0 +1,20 @@
+{
+  "name": "weblog",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI 公众号写作发布工具 - 基于 doocs/md 排版引擎",
+  "scripts": {
+    "render": "node render.mjs",
+    "themes": "node render.mjs --list-themes"
+  },
+  "dependencies": {
+    "marked": "^17.0.4",
+    "highlight.js": "^11.11.1",
+    "postcss": "^8.5.8",
+    "postcss-custom-properties": "^15.0.1",
+    "postcss-calc": "^10.1.1",
+    "juice": "^11.0.0",
+    "jsdom": "^25.0.0",
+    "dompurify": "^3.3.0"
+  }
+}
