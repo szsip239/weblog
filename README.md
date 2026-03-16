@@ -1,8 +1,8 @@
 # WebLog
 
-**用 Markdown 写公众号文章，用 AI Coding 工具一句话排版发布。**
+**用 Markdown 写公众号文章，用 AI Coding 工具一句话完成写作、排版、去痕、发布。**
 
-基于 [doocs/md](https://github.com/doocs/md) 排版引擎移植的本地渲染管线，支持多主题、自定义配色、代码高亮，输出微信兼容的内联样式 HTML。搭配内置 Skill，在 Claude Code / OpenClaw 等 AI Coding 工具中一句话完成排版发布。
+AI 风格写作 + doocs/md 专业排版 + AI 去痕 + 一键发布草稿箱。搭配内置 Skill，在 Claude Code / OpenClaw 等 AI Coding 工具中自然语言驱动全流程。
 
 <p align="center">
   <img src="images/theme-showcase.gif" alt="主题展示" width="400">
@@ -12,22 +12,45 @@
 
 | 你是... | 痛点 | WebLog 怎么帮你 |
 |---------|------|----------------|
-| 公众号日更作者 | 每次手动排版耗时，格式不统一 | Markdown 写完，一条命令生成专业排版 |
-| AI 工具用户 | 想用自然语言完成发布流程 | 内置 Skill，说"帮我发到公众号"就行 |
-| 跨平台发布者 | 图片在不同平台需要不同 URL | COS 图床一次上传，URL 全平台通用 |
+| 公众号日更作者 | 每次手动排版耗时 | Markdown 写完，一条命令专业排版 |
+| 写作小白 | 不知道怎么写出好文章 | AI 风格写作，从一个想法生成完整文章 |
+| AI 写作用户 | 文章一看就是 AI 写的 | AI 去痕，24 种痕迹检测 + 5 维评分 |
+| 跨平台发布者 | 图片在不同平台要不同 URL | COS 图床一次上传，URL 全平台通用 |
 | 技术博主 | 代码块在微信里样式丢失 | 90+ 代码高亮主题，全部内联样式 |
+| 图片内容创作者 | 想发图片消息（小绿书） | 小绿书模式，最多 20 张图 |
 
-## 核心特性
+## 六大核心功能
+
+| 功能 | 命令 | 说明 | 适合谁 |
+|------|------|------|--------|
+| **风格写作** | `write` | AI 辅助写作，从想法生成文章 + 封面提示词 | 写作小白、内容创作者 |
+| **Markdown 排版** | `render` | 3 种 doocs/md 主题，CSS 变量自定义，90+ 代码高亮 | 所有用户 |
+| **AI 去痕** | `humanize` | 检测 24 种 AI 痕迹，3 种强度，5 维评分 | AI 写作用户 |
+| **草稿发布** | `publish` | 图片压缩 + COS/微信上传 + 一键推送草稿箱 | 需要发布的用户 |
+| **小绿书** | `image_post` | 图片消息，最多 20 张，从 MD 提取或手动指定 | 图片内容创作者 |
+| **AI 图片生成** | `generate` | Markdown 中 `![alt](__generate:prompt__)` 语法 | 需要配图的用户 |
+
+### write 与 render 的区别
+
+| 对比项 | write（写作） | render（排版） |
+|--------|--------------|---------------|
+| 输入 | 一个想法/片段/大纲 | 完整的 Markdown 文件 |
+| 输出 | 结构化的 Markdown 文章 | 微信兼容 HTML |
+| 用途 | 从零创作内容 | 格式转换已有内容 |
+| 封面 | 自动生成封面提示词 | 需手动指定封面图 |
+
+## 特性详情
 
 - **3 种排版主题** — 经典 (default)、优雅 (grace)、简洁 (simple)，移植自 doocs/md
 - **自定义配色** — 8 种预设色 + 任意 HEX 色值 + 字体/字号/标题样式
-- **代码高亮** — highlight.js 90+ 主题（github / atom-one-dark / monokai...），内联样式输出
+- **代码高亮** — highlight.js 90+ 主题，内联样式输出
 - **GFM Alert** — `[!TIP]` `[!WARNING]` 等 20+ 类型，带 SVG 图标
 - **扩展语法** — `==高亮==` `++下划线++` `~波浪线~` 脚注
 - **微信全兼容** — CSS 变量解析 + calc 计算 + juice 内联 + 外链转脚注
+- **图片压缩** — 上传前自动缩放（>1920px）和降质（>1MB）
+- **AI 图片生成** — Markdown 中 `![alt](__generate:prompt__)` 自动生成
 - **图床可选** — 腾讯云 COS（跨平台）或微信自带（零配置）
-- **本地预览** — 375px 手机模拟框，浏览器直接查看效果
-- **AI Skill** — 适配 Claude Code / OpenClaw 等 AI Coding 工具
+- **本地预览** — 375px 手机模拟框，浏览器直接查看
 
 ## 主题预览
 
@@ -137,7 +160,9 @@ AI 会自动引导你选择主题配色 → 渲染预览 → 确认发布。
 ## 架构
 
 ```
-Markdown 文件
+想法 / 片段 / 大纲
+    ↓  (Skill: write + humanize)
+AI 风格写作 → AI 去痕 → Markdown 文件
     ↓
 render.mjs (Node.js)
     ├── marked@17 自定义 renderer
@@ -149,9 +174,11 @@ render.mjs (Node.js)
 微信兼容 HTML (所有样式内联)
     ↓
 publish.py (Python)
-    ├── 腾讯云 COS (可选，跨平台图床)
-    ├── 微信素材 API (封面图 + 回退图床)
-    └── 微信草稿 API (创建草稿)
+    ├── AI 图片生成 (__generate:prompt__)
+    ├── 图片压缩 (>1920px / >1MB)
+    ├── 腾讯云 COS / 微信临时素材 (图床)
+    ├── 微信素材 API (封面图 → media_id)
+    └── 微信草稿 API / 小绿书
     ↓
 微信公众号草稿箱
 ```
@@ -180,6 +207,17 @@ publish.py (Python)
 | `COS_PREFIX` | 图片路径前缀，默认 `article` |
 
 使用 COS 还需安装 SDK：`pip install cos-python-sdk-v5`
+
+**可选（AI 图片生成）：**
+
+在 Markdown 中使用 `![描述](__generate:英文提示词__)` 语法，发布时自动调用 AI 生成图片。
+
+| 变量 | 说明 |
+|------|------|
+| `IMAGE_API_KEY` | OpenAI API Key 或兼容 API |
+| `IMAGE_API_BASE` | API 地址，默认 `https://api.openai.com/v1` |
+| `IMAGE_MODEL` | 模型名，默认 `dall-e-3` |
+| `IMAGE_SIZE` | 图片尺寸，默认 `1792x1024` |
 
 ## 致谢
 
